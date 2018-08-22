@@ -11,6 +11,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
+@SuppressWarnings("serial")
 public class ServerFrame extends JFrame {
 	private JPanel contentPanel;
 	private JButton startButton;

@@ -7,6 +7,7 @@ public class Server {
 	public Server() {
 		this.port = 30000;
 	}
+	
 	public static void main(String args[]) {
 		Server server = new Server();
 		server.boot();
@@ -23,8 +24,9 @@ public class Server {
 			.setVisible(true);
 	}
 	
+	// ServerFrame에서 Start버튼 클릭 시 시작
 	public void start() {
-		System.out.println("서버 시작 ㅎ");
+		UserConnector userConnector = new UserConnector();
 	}
 	
 }
