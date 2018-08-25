@@ -1,8 +1,11 @@
 package server;
 
+import game.chat.ChatRoom;
+
 public class Server {
-	ServerFrame serverFrame;
-	int port;
+	private ServerFrame serverFrame;
+	private	ChatRoom chatRoom;
+	private	int port;
 	
 	public Server() {
 		this.port = 30000;
@@ -14,19 +17,21 @@ public class Server {
 	}
 	
 	public void boot() {
-		this.initGraphic();
-	}
-	
-	private void initGraphic() {
-		this.serverFrame = new ServerFrame(this, this.port);
+		this.serverFrame = new ServerFrame(this);
 		serverFrame
 			.init()
 			.setVisible(true);
 	}
 	
+	public int getPort() {
+		return this.port;
+	}
+	
 	// ServerFrame에서 Start버튼 클릭 시 시작
-	public void start() {
-		UserConnector userConnector = new UserConnector();
+	public void startReceive() {
+		UserConnector userConnector = new UserConnector(this.port);
+		userConnector.setChatRoom(new ChatRoom());
+		userConnector.run();
 	}
 	
 }

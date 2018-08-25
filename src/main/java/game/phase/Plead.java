@@ -3,15 +3,15 @@ package game.phase;
 import game.GameEngine;
 import game.timer.Timer;
 
-// State Pattern -
-public class Night implements Phase {
+// State Pattern - 
+public class Plead implements Phase {
 	private final int phaseInterval = 15;
 	private Phase nextPhase;
 	private GameEngine gameEngine;
 	
 	@Override
 	public void executeThisPhase() {
-		String resultMessage = "NIGHT:";
+		String resultMessage = "PLEAD:";
 		this.gameEngine.broadCast(resultMessage);
 		// TODO Auto-generated method stub
 		

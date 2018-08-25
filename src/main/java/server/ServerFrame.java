@@ -19,17 +19,8 @@ public class ServerFrame extends JFrame {
 	
 	private Server server;
 	
-	private int port;
-	
-	public ServerFrame(Server server, int port) {
+	public ServerFrame(Server server) {
 		this.server = server;
-		this.port = port;
-	}
-	
-	// Server Setter
-	public ServerFrame setServer(Server server) {
-		this.server = server;
-		return this;
 	}
 	
 	// Initializer
@@ -63,7 +54,7 @@ public class ServerFrame extends JFrame {
 		contentPanel.add(scroll);
 
 		/* Port번호 보여주는 라벨 */
-		JLabel lblNewLabel = new JLabel("Port Number :" + this.port);
+		JLabel lblNewLabel = new JLabel("Port Number :" + this.server.getPort());
 		lblNewLabel.setBounds(12, 24, 150, 37);
 		contentPanel.add(lblNewLabel);
 
@@ -90,7 +81,7 @@ public class ServerFrame extends JFrame {
 		
 		// 버튼 클릭하면 서버 시작
 		public void actionPerformed(ActionEvent e) {
-			this.server.start();
+			this.server.startReceive();
 		}
 	}
 }
