@@ -6,8 +6,6 @@ import game.user.User;
 
 // State Pattern - 
 public class Morning implements Phase {
-	// 아침 시작 이후 15초 지속
-	private final int phaseInterval = 15;
 	private Phase nextPhase;
 	private GameEngine gameEngine;
 	
@@ -55,7 +53,7 @@ public class Morning implements Phase {
 
 	@Override
 	public int getPhaseInterval() {
-		return this.phaseInterval;
+		return Interval.MORNING_INTERVAL.getValue();
 	}
 
 }

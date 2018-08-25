@@ -5,7 +5,6 @@ import game.timer.Timer;
 
 // State Pattern - 
 public class Plead implements Phase {
-	private final int phaseInterval = 15;
 	private Phase nextPhase;
 	private GameEngine gameEngine;
 	
@@ -34,7 +33,7 @@ public class Plead implements Phase {
 
 	@Override
 	public int getPhaseInterval() {
-		return this.phaseInterval;
+		return Interval.PLEAD_INTERVAL.getValue();
 	}
 
 }
