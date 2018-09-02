@@ -1,14 +1,16 @@
 package game.phase;
 
-public enum Interval {
+public enum PhaseInterval {
 	MORNING_INTERVAL(15)
 	, NIGHT_INTERVAL(15)
 	, PLEAD_INTERVAL(15)
-	, VOTE_INTERVAL(15);
+	, MAFIAVOTE_INTERVAL(15)
+	, EXECUTEVOTE_INTERVAL(15)
+	, EXECUTE_INTERVAL(15);
 	
 	private final int value;
 	
-    private Interval(int value) {
+    private PhaseInterval(int value) {
         this.value = value;
     }
 

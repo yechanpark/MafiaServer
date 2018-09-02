@@ -1,4 +1,4 @@
-package game.chat;
+package game.chat.protocol;
 
 public class MessageConvertor {
 	public String[] parseMessage(String unParsedMessage) {

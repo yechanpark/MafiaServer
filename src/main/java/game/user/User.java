@@ -2,10 +2,9 @@ package game.user;
 
 import java.net.Socket;
 
-import game.chat.MessageConvertor;
-import game.chat.MessageConvertorFactory;
-import game.chat.MessageSender;
-import game.job.jobs.Job;
+import game.chat.protocol.MessageConvertor;
+import game.chat.protocol.MessageConvertorFactory;
+import game.chat.protocol.MessageSender;
 
 public class User extends Thread {
 	private final int MAX_MESSAGE_LENGTH = 128;
@@ -16,7 +15,6 @@ public class User extends Thread {
 	private MessageSender messageSender;
 	private GameStatus gameStatus;
 	
-	private Job job;
 
 	public User() {
 		this.gameStatus = new GameStatus();
@@ -37,7 +35,7 @@ public class User extends Thread {
 
 	public void setSocket(Socket socket) {
 		this.messageSender = new MessageSender();
-		messageSender.setSocket(socket);
+		this.messageSender.setSocket(socket);
 	}
 
 	private String read() {
@@ -65,10 +63,6 @@ public class User extends Thread {
 
 		for (int i = 0; i < realMessage.length; i++)
 			resultMessage[i] = realMessage[i];
-	}
-
-	public void death() {
-		this.gameStatus.death();
 	}
 	
 	public void run() {

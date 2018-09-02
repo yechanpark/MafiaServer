@@ -1,4 +1,4 @@
-package game.chat;
+package game.chat.protocol;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
