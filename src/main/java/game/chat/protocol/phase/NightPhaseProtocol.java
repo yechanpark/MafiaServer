@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Setter
 public class NightPhaseProtocol implements Protocol {
-	
+	private final String protocolType = "PHASE";
 	private String phase; // 어떤 phase에서 보낸 메시지인지
 	
 	// MafiaVote -> Night : 투표가 유효하지 않아서 MafiaVote -> Plead가 아닌 Night로 이동한 경우 false, 그 외에는 true

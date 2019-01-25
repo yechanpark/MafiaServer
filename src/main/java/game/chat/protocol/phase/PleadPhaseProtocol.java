@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Setter
 public class PleadPhaseProtocol implements Protocol {
-	
+	private final String protocolType = "PHASE";
 	private String phase; // 어떤 phase에서 보낸 메시지인지
 	private String pleadUserId; // 어떤 유저가  최후의 변론을 하는지
 	

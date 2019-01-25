@@ -5,22 +5,22 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
 import game.GameEngine;
+import game.chat.protocol.timer.TimerProtocol;
 import game.phase.Phase;
 
 public class Timer implements Runnable {
 	private ScheduledExecutorService scheduledExecutorService;
 	private Phase phase;
 	private GameEngine gameEngine;
-	
-	private int interval;
+	private TimerProtocol timerProtocol;
 	
 	// 특정 Phase에서 nextPhase를 인자로 넘김
 	public Timer(Phase phase, GameEngine gameEngine) {
 		this.phase = phase;
-		this.interval = phase.getPhaseInterval();
 		this.gameEngine = gameEngine;
 		scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
 		scheduledExecutorService.scheduleAtFixedRate(this, 0, 1000, TimeUnit.MILLISECONDS);
+		timerProtocol = new TimerProtocol(phase.getPhaseInterval());
 	}
 	
 	// 1초마다 실행됨
@@ -31,7 +31,7 @@ public class Timer implements Runnable {
 			scheduledExecutorService.shutdownNow();
 		
 		// 시간이 다 된 경우
-		if( (this.interval--) <= 0 ) {
+		if( (timerProtocol.getRemainTime()) <= 0 ) {
 			// 현재 Phase 수행
 			// 1. preExecute - 이전 Phase에서 수정한 메타 데이터를 바탕으로 유저에게 보낼 메시지를 조합
 			phase.preExecutePhase();
@@ -43,6 +43,9 @@ public class Timer implements Runnable {
 			phase.postExecutePhase();
 			scheduledExecutorService.shutdownNow();
 		}
+		
+		// 초마다 남은 시간을 보냄
+		gameEngine.sendProtocol(timerProtocol.processTime());
 		
 
 	}

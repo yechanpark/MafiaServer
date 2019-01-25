@@ -1,6 +1,8 @@
 package game.user;
 
 import game.job.jobs.Job;
+import lombok.Getter;
+import lombok.Setter;
 
 public class GameStatus {
 	private boolean isKillTagged; // 마피아가 살인을 시도했는지 여부
@@ -13,6 +15,8 @@ public class GameStatus {
 	private boolean executeVoteDeadTagged; // 처형 투표에서 처형이 됐는지 여부
 	private boolean executeAgree; // 최후의 반론에서 해당 유저가 찬성했는지 여부 
 	
+	@Getter
+	@Setter
 	private Job job; // 할당된 직업
 	
 	public GameStatus() {
@@ -62,10 +66,6 @@ public class GameStatus {
 	
 	public boolean getIsLived() {
 		return this.isLived;
-	}
-	
-	public Job getJob() {
-		return this.job;
 	}
 	
 	public boolean getReportable() {

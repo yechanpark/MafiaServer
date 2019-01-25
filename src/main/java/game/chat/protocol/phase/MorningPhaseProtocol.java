@@ -8,7 +8,7 @@ import lombok.Setter;
 
 @Setter
 public class MorningPhaseProtocol implements Protocol {
-	
+	private final String protocolType = "PHASE";
 	// 어떤 phase에서 보낸 메시지인지
 	private String phase;
 

@@ -1,11 +1,20 @@
 package game;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import game.chat.ChatRoom;
 import game.chat.protocol.Protocol;
+import game.job.jobs.Civil;
+import game.job.jobs.Doctor;
+import game.job.jobs.Job;
 import game.job.jobs.Mafia;
+import game.job.jobs.Police;
+import game.job.jobs.Politician;
+import game.job.jobs.Reporter;
+import game.job.jobs.Spy;
 import game.job.jobtype.JobType;
 import game.user.User;
 
@@ -16,6 +25,7 @@ public class GameEngine {
 		this.chatRoom = chatRoom;
 	}
 
+	// 마피아가 killTagged한 유저를 구함
 	public User getKillTaggedUser() {
 		for (User user : chatRoom.getUserList()) {
 			if (user.getGameStatus().getIsKillTagged())
@@ -24,27 +34,30 @@ public class GameEngine {
 		return null;
 	}
 
+	// 의사가 healTagged한 유저를 구함
 	public User getHealTaggedUser() {
+		User healTaggedUser = null;
+		
 		for (User user : chatRoom.getUserList()) {
 			if (user.getGameStatus().getIsHealTagged())
-				return user;
+				healTaggedUser = user;
 		}
-		return null;
+		
+		return healTaggedUser;
 	}
 
-	public void broadCast(String broadCastMessage) {
-		this.chatRoom.broadCast(broadCastMessage);
-	}
-
+	// 현재 chatRoom에서 게임이 진행중인지 체크
 	public boolean getIsPlaying() {
 		return this.chatRoom.getIsPlaying();
 	}
 
+	// 의사가 한 healTag를 초기화
 	public void initHealTag() {
 		for (User user : this.chatRoom.getUserList())
 			user.getGameStatus().setIsHealTagged(false);
 	}
 
+	// 마피아가 한 killTag를 초기화
 	public void initKillTag() {
 		for (User user : this.chatRoom.getUserList()) {
 			user.getGameStatus().setIsKillTagged(false);
@@ -61,14 +74,22 @@ public class GameEngine {
 		return null;
 	}
 
+	// 리포터가 태그한 유저를 구해서 리턴
 	public User getReportTaggedUser() {
+		User reportTaggedUser = null;
+		
 		for (User user : this.chatRoom.getUserList()) {
 			if (user.getGameStatus().getIsReportTagged())
-				return user;
+				reportTaggedUser = user;
 		}
-		return null;
+		
+		return reportTaggedUser;
 	}
 
+	// 게임이 끝났는지 체크, 마피아 혹은 시민의 승리 여부를 결정
+	// MAFIA 리턴 시 MAFIA 승리
+	// CIVIL 리턴 시 CIVIL 승리
+	// null 리턴 시 게임 종료되지 않음
 	public JobType checkGameOver() {
 
 		// Mafia가 Job이면서 살아있는 유저 수
@@ -108,6 +129,7 @@ public class GameEngine {
 
 	}
 
+	// 생존한 사람의 숫자를 구함
 	public int getSurviverCount() {
 		int surviverCount = 0;
 
@@ -157,6 +179,7 @@ public class GameEngine {
 		}
 	}
 
+	// chatRoom에 있는 생존 유저들 중, 최근 ExecuteVote Phase에서 처형당한 유저를 리턴
 	public User getDeadPleadUser() {
 		User deadPleadUser = null;
 
@@ -171,12 +194,81 @@ public class GameEngine {
 
 	}
 
+	// 인자로 넘어온 Protocol을 json포맷으로 만들어서 모든 유저에게 전송
 	public void sendProtocol(Protocol protocol) {
 		String phaseProtocolMessage = protocol.toJSONString();
+		// TODO : phaseProtocolMessage를 모든 유저에게 보내는 로직
 	}
 
+	// killTagged된 유저를 죽은 상태로 전환하도록 처리
 	public void killUser(User killTaggedUser) {
 		killTaggedUser.getGameStatus().death();
 	}
+	
+	
+	// 선정된 직업들을 각 User에게 세팅
+	public void allocateJob() {
+		List<Job> pickedJobList = getPickedJobList();
+		
+		// 랜덤으로 섞음
+		Collections.shuffle(pickedJobList);
+		
+		Iterator<Job> iterator = pickedJobList.iterator();
+		for(User user : chatRoom.getUserList())
+			user.getGameStatus().setJob(iterator.next());
+		
+	}
+	
+	// 인원수에 따라 사용될 직업들의 리스트를 선정하여 리턴
+	private List<Job> getPickedJobList() {
+
+		List<Job> pickedJobList = new ArrayList<Job>();
+		
+		// 기본 직업 세팅
+		pickedJobList.addAll(this.getDefaultJobList());
+		
+		// 4명 이상인 경우 시민 직업 추가
+		if(chatRoom.getUserList().size() >= 4)
+			pickedJobList.add
+		// TODO : 인원수에 따라 마피아, 시민 밸런스 맞춰서 직업 할당
+		
+		return pickedJobList;
+		
+	}
+	
+	// 필수 마피아 직업(마피아)를 제외한 마피아팀 직업 리스트 반환
+	private List<Job> getDefaultJobList() {
+		List<Job> defaultJobList = new ArrayList<Job>();
+		
+		// 기본 직업 3개 세팅
+		defaultJobList.add(new Mafia());
+		defaultJobList.add(new Police());
+		defaultJobList.add(new Doctor());
+		
+		return defaultJobList;
+	}
+	
+	// 필수 시민 직업(의사, 경찰)을 제외한 시민팀 직업 리스트 반환
+	private List<Job> getCivilTeamJobList() {
+		List<Job> civilTeamJobList = new ArrayList<Job>();
+		
+		civilTeamJobList.add(new Civil());
+		civilTeamJobList.add(new Politician());
+		civilTeamJobList.add(new Reporter());
+		
+		return civilTeamJobList;
+	}
+	
+	// 필수 마피아 직업(마피아)를 제외한 마피아팀 직업 리스트 반환
+	private List<Job> getMafiaTeamJobList() {
+		List<Job> mafiaTeamJobList = new ArrayList<Job>();
+		
+		mafiaTeamJobList.add(new Spy());
+		
+		return mafiaTeamJobList;
+	}
+	
+
+	
 
 }
